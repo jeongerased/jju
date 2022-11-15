@@ -61,20 +61,18 @@ public class Login extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		User user;
 		JButton b=(JButton)e.getSource();
-		user=dba.userCount(Integer.parseInt(textField_1.getText()),textField.getText());
+		user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
 		if(textField_1.getText().equals("")||textField.getText().equals("")) {
 			System.out.println("값 입력 안했다.");
 		}
 		else if(Integer.parseInt(textField_1.getText())==0) {
-			user=dba.userCount(Integer.parseInt(textField_1.getText()),textField.getText());
+			user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
 			if(user!=null) new MyUser(user);
-			//System.out.println(user.toString());
 			this.dispose();
 		}
 		else {
-			user=dba.userCount(Integer.parseInt(textField_1.getText()),textField.getText());
+			user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
 			if(user!=null) new MyUser(user);
-			//System.out.println(user.toString());
 			this.dispose();
 		}
 	}

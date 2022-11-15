@@ -188,7 +188,7 @@ public class DBA {
 			conn.close();
 		}catch(SQLException e) {}
 	}
-	public User userCount(int id,String name) {
+	public User login(int id,String name) {
 		User user=new User();
 		int n=0;
 		try {
