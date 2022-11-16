@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 
 public class Login extends JFrame implements ActionListener {
@@ -67,7 +68,12 @@ public class Login extends JFrame implements ActionListener {
 		}
 		else if(Integer.parseInt(textField_1.getText())==0) {
 			user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
-			if(user!=null) new MyUser(user);
+			if(user!=null) { 
+				ArrayList<User> list=new ArrayList<>();
+				dba.selectAllData(list);
+				new adminGui(list);
+			
+			}
 			this.dispose();
 		}
 		else {

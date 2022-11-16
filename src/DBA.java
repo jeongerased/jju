@@ -17,67 +17,67 @@ public class DBA {
 	
 	//모든 유저 조회 : 관리자 페이지의 리스트에 들어갈 예정 //유저클래스는 유저클래스네임으로 바꿀것
 	//조회 메소드는 추가 수정 삭제와 다르게 인자는 리스트가 들어갈 예정, 데이터 받아와야하니까
-//	public void selectAllData(ArrayList<유저클래스> list) {
-//		try {
-//			System.out.println("db로딩중");
-//			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
-//		}catch(Exception e) {
-//			System.out.println("db로딩 실패");
-//		}
-//		String sql="Select * from user where 사원번호!=0";
-//		try {
-//			Statement stmt=conn.createStatement();
-//			ResultSet rs=stmt.executeQuery(sql);
-//			while(rs.next()) {
-//				유저클래스 user=new 유저클래스();
-//				유저클래스.setId(rs.getInt("사원번호"));
-//				유저클래스.setName(rs.getString("사원이름"));
-//				유저클래스.setDepart(rs.getString("부서"));
-//				유저클래스.setRank(rs.getString("직급"));
-//				유저클래스.setHalfway(rs.getInt("반차"));
-//				유저클래스.setReward(rs.getInt("상벌점"));
-//				유저클래스.setPoint(rs.getInt("포인트"));
-//				list.add(유저클래스);
-//			}
-//		} catch (SQLException e1) {
-//			e1.printStackTrace();
-//		}
-//		try {
-//			conn.close();
-//		}catch(SQLException e) {}
-//	}
-//	//유저 한명 조회, 사원번호로 특정 유저 '한명만' 불러온다.	
-//	//수정과 함께 쓰일 예정, 수정 메소드 이전에 한번 실행되게 할 것
-//	public void selectOnlyoneData(ArrayList<유저클래스> list,int id) {
-//		try {
-//			System.out.println("db로딩중");
-//			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
-//		}catch(Exception e) {
-//			System.out.println("db로딩 실패");
-//		}
-//		String sql="Select * from user where 사원번호=?";
-//		try {
-//			PreparedStatement pstmt=conn.prepareStatement(sql);
-//			pstmt.setInt(1,id);
-//			ResultSet rs=pstmt.executeQuery(sql);
-//			while(rs.next()) {
-//				유저클래스 user=new 유저클래스();
-//				유저클래스.setId(rs.getInt("사원번호"));
-//				유저클래스.setName(rs.getString("사원이름"));
-//				유저클래스.setDepart(rs.getString("부서"));
-//				유저클래스.setRank(rs.getString("직급"));
-//				유저클래스.setHalfway(rs.getInt("반차"));
-//				유저클래스.setReward(rs.getInt("상벌점"));
-//				유저클래스.setPoint(rs.getInt("포인트"));
-//				list.add(유저클래스);
-//			}
-//		} catch (SQLException e1) {
-//			e1.printStackTrace();
-//		}
-//		try {
-//			conn.close();
-//		}catch(SQLException e) {}
-//	}
+	public void selectAllData(ArrayList<User> list) {
+		try {
+			System.out.println("db로딩중");
+			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
+		}catch(Exception e) {
+			System.out.println("db로딩 실패");
+		}
+		String sql="Select * from user where 사원번호!=0";
+		try {
+			Statement stmt=conn.createStatement();
+			ResultSet rs=stmt.executeQuery(sql);
+			while(rs.next()) {
+				User user=new User();
+				user.setId(rs.getInt("사원번호"));
+				user.setName(rs.getString("사원이름"));
+				user.setDepart(rs.getString("부서"));
+				user.setRank(rs.getString("직급"));
+				user.setHalfway(rs.getInt("반차"));
+				user.setReward(rs.getInt("상벌점"));
+				user.setPoint(rs.getInt("포인트"));
+				list.add(user);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			conn.close();
+		}catch(SQLException e) {}
+	}
+	//유저 한명 조회, 사원번호로 특정 유저 '한명만' 불러온다.	
+	//수정과 함께 쓰일 예정, 수정 메소드 이전에 한번 실행되게 할 것
+	public void selectOnlyoneData(ArrayList<User> list,int id) {
+		try {
+			System.out.println("db로딩중");
+			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
+		}catch(Exception e) {
+			System.out.println("db로딩 실패");
+		}
+		String sql="Select * from user where 사원번호=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1,id);
+			ResultSet rs=pstmt.executeQuery(sql);
+			while(rs.next()) {
+				User user=new User();
+				user.setId(rs.getInt("사원번호"));
+				user.setName(rs.getString("사원이름"));
+				user.setDepart(rs.getString("부서"));
+				user.setRank(rs.getString("직급"));
+				user.setHalfway(rs.getInt("반차"));
+				user.setReward(rs.getInt("상벌점"));
+				user.setPoint(rs.getInt("포인트"));
+				list.add(user);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			conn.close();
+		}catch(SQLException e) {}
+	}
 	//유저를 추가 : 관리자 페이지의 추가에 들어갈 예정, 유저 클래스의 필드의 모든 값을 입력받는다.
 	public void insertData(int id,String name, String depart, String rank, int halfway, int reward,int point) {
 		try {

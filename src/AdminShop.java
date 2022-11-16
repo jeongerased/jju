@@ -13,7 +13,7 @@ public class AdminShop extends JFrame{
 		
 		public AdminShop() {
 			setTitle("상점");
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			Container adminShoppane = getContentPane();
 			
 			
@@ -37,7 +37,7 @@ public class AdminShop extends JFrame{
 			// 타이틀 라벨 생성
 			JLabel titleJLabel = new JLabel("관리자 - 상점");
 			SetFont(titleJLabel, 30);
-			titleJLabel.setBounds(400, 5, 200, 80);
+			titleJLabel.setBounds(400, 5, 240, 80);
 			
 			
 			// 이미지 라벨 생성 & 이미지 적용 - setIcon
@@ -349,6 +349,9 @@ public class AdminShop extends JFrame{
 		
 		public void SetLocation() {
 			
+		}
+		public static void main(String[] args) {
+			new AdminShop();
 		}
 
 }

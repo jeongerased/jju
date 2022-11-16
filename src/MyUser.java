@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.LineNumberInputStream;
 
 public class MyUser extends JFrame implements ActionListener{
 	private JLabel uname;
@@ -75,6 +76,7 @@ public class MyUser extends JFrame implements ActionListener{
 		store.setFont(new Font("돋음", Font.PLAIN, 18));
 		store.setSize(100, 50);
 		store.setLocation(350, 200);
+		store.addActionListener(this);
 		c.add(store);
 		
 		inventory = new JButton("내 가방");
@@ -88,9 +90,11 @@ public class MyUser extends JFrame implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton b=(JButton)e.getSource();
-		if(b.getText().equals("상점")) {
+		if(e.getSource()==store) {
 			new UserShop();
+		}
+		else if(e.getSource()==inventory) {
+			//
 		}
 	}
 
