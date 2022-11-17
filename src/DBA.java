@@ -158,6 +158,39 @@ public class DBA {
 			conn.close();
 		}catch(SQLException e) {}
 	}
+	public void updatecoin(int id, int reward) {
+		try {
+			System.out.println("db로딩중");
+			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
+		}catch(Exception e) {
+			System.out.println("db로딩 실패");
+		}
+		String sql="update user set 상벌점=? where 사원번호=?";
+		PreparedStatement pstmt=null;
+		//폼에서 데이터 받아올 코드 작성
+		
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1, reward);
+			pstmt.setInt(2, id);
+			
+			int result= pstmt.executeUpdate();
+			if(result==1) {
+				System.out.println("update complete");
+			}
+		}catch(Exception e) {
+			System.out.println("update failed");
+		}finally {
+			try {
+				if(pstmt!=null && !pstmt.isClosed()) {
+					pstmt.close();
+				}
+			}catch (Exception e) {}
+		}
+		try {
+			conn.close();
+		}catch(SQLException e) {}
+	}
 	//유저 삭제 : 관리자 클래스의 삭제에 들어갈 예정, id만 입력받아 삭제할 수 있다.
 	public void deleteData(int id) {
 		try {

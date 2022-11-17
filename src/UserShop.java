@@ -3,12 +3,15 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class UserShop extends JFrame{
-	private int coin = 10;
+	private int coin;
 	private JLabel coinLabel;
-	
-	public UserShop() {
+	private DBA db=new DBA();
+	private User user;
+	public UserShop(User u) {
+		user=u;
+		coin=user.getReward();
 		setTitle("상점");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Container usershoppane = getContentPane();
 		
 		
@@ -31,7 +34,7 @@ public class UserShop extends JFrame{
 		// 타이틀 라벨 생성
 		JLabel titleJLabel = new JLabel("사용자 - 상점");
 		SetFont(titleJLabel, 30);
-		titleJLabel.setBounds(400, 5, 200, 80);
+		titleJLabel.setBounds(400, 5, 240, 80);
 		
 		
 		// 이미지 라벨 생성 & 이미지 적용 - setIcon
@@ -205,6 +208,7 @@ public class UserShop extends JFrame{
 					coin -= price;
 					JOptionPane.showMessageDialog(null, "구매되었습니다. \n현재 보유 코인 : " + coin, "구매 성공", JOptionPane.INFORMATION_MESSAGE);
 					coinLabel.setText("상/벌점 : " + coin);
+					db.updatecoin(user.getId(), coin);
 				}
 				
 			}
@@ -250,8 +254,5 @@ public class UserShop extends JFrame{
 	
 	public void SetLocation() {
 		
-	}
-	public static void main(String[] args) {
-		new UserShop();
 	}
 }

@@ -10,8 +10,10 @@ public class MyUser extends JFrame implements ActionListener{
 	private JLabel upoint;
 	private JButton store;
 	private JButton inventory;
-	public MyUser(User user)
+	private User user;
+	public MyUser(User u)
 	{
+		user=u;
 		setTitle("이용자 화면");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container c = getContentPane();
@@ -91,7 +93,7 @@ public class MyUser extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==store) {
-			new UserShop();
+			new UserShop(user);
 		}
 		else if(e.getSource()==inventory) {
 			//
