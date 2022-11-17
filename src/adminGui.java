@@ -91,7 +91,9 @@ public class adminGui extends JFrame implements ActionListener {
 			new AdminShop();
 		}
 		else if(e.getSource()==searchBtn) {
-			searchBtn.setText("test");
+			if(searchText.getText()!="") {
+				
+			}
 		}
 	}
 }
