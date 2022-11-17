@@ -15,6 +15,7 @@ public class DBA {
 	private static String dbUser= "testjju";
 	private static String dbpw="1234";
 	
+	
 	//모든 유저 조회 : 관리자 페이지의 리스트에 들어갈 예정 //유저클래스는 유저클래스네임으로 바꿀것
 	//조회 메소드는 추가 수정 삭제와 다르게 인자는 리스트가 들어갈 예정, 데이터 받아와야하니까
 	public void selectAllData(ArrayList<User> list) {
@@ -188,15 +189,17 @@ public class DBA {
 			conn.close();
 		}catch(SQLException e) {}
 	}
-	public User login(int id,String name) {
-		User user=new User();
-		int n=0;
+	public User login(String ids,String name) {
+		int id=Integer.parseInt(ids);
 		try {
 			System.out.println("db로딩중");
 			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
 		}catch(Exception e) {
 			System.out.println("db로딩 실패");
 		}
+		User user=new User();
+		int n=0;
+		
 		String sql="Select * from user where 사원번호=? and 사원이름=?";
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(sql);
@@ -204,6 +207,7 @@ public class DBA {
 			pstmt.setString(2,name);
 			ResultSet rs=pstmt.executeQuery();
 
+			
 			while(rs.next()) {
 				user.setId(rs.getInt("사원번호"));
 				user.setName(rs.getString("사원이름"));

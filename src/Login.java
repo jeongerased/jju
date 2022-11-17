@@ -60,26 +60,32 @@ public class Login extends JFrame implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		User user;
+		User user=new User();
 		JButton b=(JButton)e.getSource();
-		user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
 		if(textField_1.getText().equals("")||textField.getText().equals("")) {
-			System.out.println("값 입력 안했다.");
+			JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","",JOptionPane.WARNING_MESSAGE);
 		}
-		else if(Integer.parseInt(textField_1.getText())==0) {
-			user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
-			if(user!=null) { 
+		else {
+			user=dba.login(textField_1.getText(),textField.getText());
+			if(user.getName()==null||Integer.toString(user.getId())==null) {
+				JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","",JOptionPane.WARNING_MESSAGE);
+			}
+			else if(user.getId()==0&&user.getName().equals("admin")) {
+				//user=dba.login(textField_1.getText(),textField.getText());
 				ArrayList<User> list=new ArrayList<>();
 				dba.selectAllData(list);
 				new adminGui(list);
-			
+				this.dispose();
+
 			}
-			this.dispose();
-		}
-		else {
-			user=dba.login(Integer.parseInt(textField_1.getText()),textField.getText());
-			if(user!=null) new MyUser(user);
-			this.dispose();
+			else if (Integer.toString(user.getId())!=null) {
+				//user=dba.login(textField_1.getText(),textField.getText());
+				new MyUser(user);
+				this.dispose();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","",JOptionPane.WARNING_MESSAGE);
+			}
 		}
 	}
 	
