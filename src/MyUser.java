@@ -11,6 +11,8 @@ public class MyUser extends JFrame implements ActionListener{
 	private JButton store;
 	private JButton inventory;
 	private User user;
+	private JButton refresh;
+	
 	public MyUser(User u)
 	{
 		user=u;
@@ -19,7 +21,7 @@ public class MyUser extends JFrame implements ActionListener{
 		Container c = getContentPane();
 		c.setLayout(null);
 		c.setBackground(SystemColor.info);
-		ImageIcon img = new ImageIcon("C:\\Users\\이창건\\Documents\\20212950\\2학년\\JAVA\\LCG\\JavaTeamProject\\src\\Images\\tstaff.jpg");
+		ImageIcon img = new ImageIcon("employee.jpg");
 		JLabel imageLabel = new JLabel(img, JLabel.CENTER);
 		imageLabel.setBounds(30, 30, 150, 187);
 		c.add(imageLabel);
@@ -29,6 +31,7 @@ public class MyUser extends JFrame implements ActionListener{
 		time.setSize(350, 50);
 		time.setLocation(200, 20);
 		c.add(time);
+		
 		
 		JLabel name = new JLabel("이름 |");
 		name.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
@@ -85,7 +88,15 @@ public class MyUser extends JFrame implements ActionListener{
 		inventory.setFont(new Font("돋음", Font.PLAIN, 18));
 		inventory.setSize(100, 50);
 		inventory.setLocation(460, 200);
+		inventory.addActionListener(this);
 		c.add(inventory);
+		
+		refresh=new JButton("새로고침");
+		refresh.setFont(new Font("돋음", Font.PLAIN, 10));
+		refresh.setSize(80, 20);
+		refresh.setLocation(500, 3);
+		refresh.addActionListener(this);
+		c.add(refresh);
 		
 		setSize(600,300);
 		setVisible(true);
@@ -96,8 +107,18 @@ public class MyUser extends JFrame implements ActionListener{
 			new UserShop(user);
 		}
 		else if(e.getSource()==inventory) {
-			//
+			new MyInventory();
+		}
+		else if(e.getSource()==refresh) {
+			DBA db=new DBA();
+			User user=new User();
+			user=db.selectIdData(this.user.getId());
+			this.user=user;
+			
+			uname.setText(user.getName());
+			uposition.setText(user.getRank());
+			udepartment.setText(user.getDepart());
+			upoint.setText(user.getReward()+"");
 		}
 	}
-
 }

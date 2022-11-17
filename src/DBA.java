@@ -47,20 +47,20 @@ public class DBA {
 			conn.close();
 		}catch(SQLException e) {}
 	}
-	//유저 한명 조회, 사원번호로 특정 유저 '한명만' 불러온다.	
-	//수정과 함께 쓰일 예정, 수정 메소드 이전에 한번 실행되게 할 것
-	public void selectOnlyoneData(ArrayList<User> list,int id) {
+	//유저 조회
+	//조회에 사용할 예정
+	public void selectNameData(ArrayList<User> list,String name) {
 		try {
 			System.out.println("db로딩중");
 			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
 		}catch(Exception e) {
 			System.out.println("db로딩 실패");
 		}
-		String sql="Select * from user where 사원번호=?";
+		String sql="Select * from user where 사원이름=?";
 		try {
 			PreparedStatement pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1,id);
-			ResultSet rs=pstmt.executeQuery(sql);
+			pstmt.setString(1,name);
+			ResultSet rs=pstmt.executeQuery();
 			while(rs.next()) {
 				User user=new User();
 				user.setId(rs.getInt("사원번호"));
@@ -79,15 +79,46 @@ public class DBA {
 			conn.close();
 		}catch(SQLException e) {}
 	}
-	//유저를 추가 : 관리자 페이지의 추가에 들어갈 예정, 유저 클래스의 필드의 모든 값을 입력받는다.
-	public void insertData(int id,String name, String depart, String rank, int halfway, int reward,int point) {
+	//아이디로 조회
+	public User selectIdData(int id) {
 		try {
 			System.out.println("db로딩중");
 			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
 		}catch(Exception e) {
 			System.out.println("db로딩 실패");
 		}
-		String sql="insert into user values(?,?,?,?,?,?,?)";
+		User user=new User();
+		String sql="Select * from user where 사원번호=?";
+		try {
+			PreparedStatement pstmt=conn.prepareStatement(sql);
+			pstmt.setInt(1,id);
+			ResultSet rs=pstmt.executeQuery();
+			while(rs.next()) {
+				user.setId(rs.getInt("사원번호"));
+				user.setName(rs.getString("사원이름"));
+				user.setDepart(rs.getString("부서"));
+				user.setRank(rs.getString("직급"));
+				user.setHalfway(rs.getInt("반차"));
+				user.setReward(rs.getInt("상벌점"));
+				user.setPoint(rs.getInt("포인트"));
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			conn.close();
+		}catch(SQLException e) {}
+		return user;
+	}
+	//유저를 추가 : 관리자 페이지의 추가에 들어갈 예정, 유저 클래스의 필드의 모든 값을 입력받는다.
+	public void insertData(int id,String name, String depart, String rank, int halfway, int reward,int point,String imgaddr) {
+		try {
+			System.out.println("db로딩중");
+			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
+		}catch(Exception e) {
+			System.out.println("db로딩 실패");
+		}
+		String sql="insert into user values(?,?,?,?,?,?,?,?)";
 		PreparedStatement pstmt=null;
 		
 		try {
@@ -99,6 +130,7 @@ public class DBA {
 			pstmt.setInt(5, halfway);
 			pstmt.setInt(6, reward);
 			pstmt.setInt(7, point);
+			pstmt.setString(8, imgaddr);
 			
 			int result= pstmt.executeUpdate();
 			if(result==1) {
@@ -120,14 +152,14 @@ public class DBA {
 	//유저 클래스를 수정 : 관리자 페이지의 수정에 들어갈 예정, id는 수정할 수 없다. id가 수정을 위한 고유한 키이기 때문
 	//추가와 마찬가지로 모든 데이터를 입력 받는다.
 	//수정을 위한 기존 데이터 불러오기 추가하여 폼 불러올때 기본값 입력되게 한 후 변경할 수 있게 하면 될듯
-	public void updateData(int id,String name, String depart, String rank, int halfway, int reward,int point) {
+	public void updateData(int id,String name, String depart, String rank, int halfway, int reward,int point,String imgaddr) {
 		try {
 			System.out.println("db로딩중");
 			conn=DriverManager.getConnection(dburl, dbUser, dbpw);
 		}catch(Exception e) {
 			System.out.println("db로딩 실패");
 		}
-		String sql="update user set 사원이름=?, 부서=?, 직급=?, 반차=?, 상벌점=?, 포인트=? where 사원번호=?";
+		String sql="update user set 사원이름=?, 부서=?, 직급=?, 반차=?, 상벌점=?, 포인트=?, 사진=? where 사원번호=?";
 		PreparedStatement pstmt=null;
 		//폼에서 데이터 받아올 코드 작성
 		
@@ -140,6 +172,7 @@ public class DBA {
 			pstmt.setInt(5, reward);
 			pstmt.setInt(6, point);
 			pstmt.setInt(7, id);
+			pstmt.setString(8, imgaddr);
 			
 			int result= pstmt.executeUpdate();
 			if(result==1) {
@@ -222,6 +255,7 @@ public class DBA {
 			conn.close();
 		}catch(SQLException e) {}
 	}
+	//로그인용 메소드 : imgaddr 추가해야함
 	public User login(String ids,String name) {
 		int id=Integer.parseInt(ids);
 		try {
@@ -231,7 +265,6 @@ public class DBA {
 			System.out.println("db로딩 실패");
 		}
 		User user=new User();
-		int n=0;
 		
 		String sql="Select * from user where 사원번호=? and 사원이름=?";
 		try {
@@ -249,6 +282,7 @@ public class DBA {
 				user.setHalfway(rs.getInt("반차"));
 				user.setReward(rs.getInt("상벌점"));
 				user.setPoint(rs.getInt("포인트"));
+				user.setRank(rs.getString("사진"));
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();

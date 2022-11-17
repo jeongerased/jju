@@ -9,7 +9,8 @@ create table user(
 직급 CHAR(12),
 반차 INT(5),
 상벌점 INT(5),
-포인트 INT(5)
+포인트 INT(5),
+사진 CHAR(150)
 );
 
 insert into user values(0,'admin',NULL,NULL,NULL,NULL,NULL);

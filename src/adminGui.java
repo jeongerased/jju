@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class adminGui extends JFrame implements ActionListener {
@@ -10,6 +11,9 @@ public class adminGui extends JFrame implements ActionListener {
 	JButton updateBtn;
 	JButton deleteBtn;
 	JButton shopBtn;
+	JButton refreshBtn;
+	JTable users;
+	JScrollPane scroll;
 	
 	public adminGui(ArrayList<User> list){
 		setTitle("관리자");
@@ -28,8 +32,12 @@ public class adminGui extends JFrame implements ActionListener {
 		contentpane.add(searchText);
 		searchBtn=new JButton("검색");
 		searchBtn.addActionListener(this);
-		searchBtn.setBounds(430, 40, 67, 25);
+		searchBtn.setBounds(430, 40, 90, 25);
 		contentpane.add(searchBtn);
+		refreshBtn =new JButton("새로고침");
+		refreshBtn.addActionListener(this);
+		refreshBtn.setBounds(530, 40, 90, 25);
+		contentpane.add(refreshBtn);
 		
 		//등록,수정,삭제 버튼, 상점 버튼
 		insertBtn = new JButton("등록");
@@ -50,26 +58,25 @@ public class adminGui extends JFrame implements ActionListener {
 		shopBtn.setBounds(650, 400, 110, 30);
 		contentpane.add(shopBtn);
 		
+		
 		//테이블
 		
 		String column[]= {"사원번호","사원이름","부서","직급","반차","상벌점","포인트"};
 		String[][] s=new String[100][7];//= {{null,null,null,null,null,null,null}};
 		for(int i=0;i<list.size();i++) {
-			for(int j=0;j<7;j++) {
-				if(j==0) s[i][j]=list.get(i).getId()+"";
-				if(j==1) s[i][j]=list.get(i).getName();
-				if(j==2) s[i][j]=list.get(i).getDepart();
-				if(j==3) s[i][j]=list.get(i).getRank();
-				if(j==4) s[i][j]=list.get(i).getHalfway()+"";
-				if(j==5) s[i][j]=list.get(i).getReward()+"";
-				if(j==6) s[i][j]=list.get(i).getPoint()+"";
-			}
+			s[i][0]=list.get(i).getId()+"";
+			s[i][1]=list.get(i).getName();
+			s[i][2]=list.get(i).getDepart();
+			s[i][3]=list.get(i).getRank();
+			s[i][4]=list.get(i).getHalfway()+"";
+			s[i][5]=list.get(i).getReward()+"";
+			s[i][6]=list.get(i).getPoint()+"";
 		}
 		
-		JTable users=new JTable(s,column);		
+		users=new JTable(s,column);	
 		users.getTableHeader().setReorderingAllowed(false);
 		users.getTableHeader().setResizingAllowed(false);
-		JScrollPane scroll=new JScrollPane(users);
+		scroll=new JScrollPane(users);
 		scroll.setBounds(40, 90, 580, 440);
 		contentpane.add(scroll);
 		
@@ -79,21 +86,78 @@ public class adminGui extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==insertBtn) {
-			insertBtn.setText("test");
+			new RegistGui();
 		}
 		else if(e.getSource()==updateBtn) {
-			updateBtn.setText("test");
+			new ModifyGui();
 		}
 		else if(e.getSource()==deleteBtn) {
-			deleteBtn.setText("test");
+			String idstr=JOptionPane.showInputDialog("삭제할 사원번호를 입력하세요.");
+			if(idstr!=null) {
+				DBA db=new DBA();
+				int id;
+				id=Integer.parseInt(idstr);
+				db.deleteData(id);
+				JOptionPane.showConfirmDialog(null, "성공적으로 삭제되었습니다.","확인",JOptionPane.YES_OPTION);
+			}
 		}
 		else if(e.getSource()==shopBtn) {
 			new AdminShop();
 		}
 		else if(e.getSource()==searchBtn) {
-			if(searchText.getText()!="") {
-				
+			if(searchText.getText().equals("")) {				
 			}
+			else {
+				DBA db=new DBA();
+				ArrayList<User> list=new ArrayList<>();
+				scroll.setVisible(false);
+				db.selectNameData(list, searchText.getText());
+				
+				String column[]= {"사원번호","사원이름","부서","직급","반차","상벌점","포인트"};
+				String[][] s=new String[100][7];
+				for(int i=0;i<list.size();i++) {
+					s[i][0]=list.get(i).getId()+"";
+					s[i][1]=list.get(i).getName();
+					s[i][2]=list.get(i).getDepart();
+					s[i][3]=list.get(i).getRank();
+					s[i][4]=list.get(i).getHalfway()+"";
+					s[i][5]=list.get(i).getReward()+"";
+					s[i][6]=list.get(i).getPoint()+"";
+				}
+				
+				users=new JTable(s,column);	
+				users.getTableHeader().setReorderingAllowed(false);
+				users.getTableHeader().setResizingAllowed(false);
+				scroll=new JScrollPane(users);
+				scroll.setBounds(40, 90, 580, 440);
+				getContentPane().add(scroll);
+			}
+		}
+		else if(e.getSource()==refreshBtn) {
+			searchText.setText("");
+			DBA db=new DBA();
+			ArrayList<User> list=new ArrayList<>();
+			scroll.setVisible(false);
+			db.selectAllData(list);
+			
+			String column[]= {"사원번호","사원이름","부서","직급","반차","상벌점","포인트"};
+			String[][] s=new String[100][7];
+			for(int i=0;i<list.size();i++) {
+				s[i][0]=list.get(i).getId()+"";
+				s[i][1]=list.get(i).getName();
+				s[i][2]=list.get(i).getDepart();
+				s[i][3]=list.get(i).getRank();
+				s[i][4]=list.get(i).getHalfway()+"";
+				s[i][5]=list.get(i).getReward()+"";
+				s[i][6]=list.get(i).getPoint()+"";
+			}
+			
+			users=new JTable(s,column);	
+			users.getTableHeader().setReorderingAllowed(false);
+			users.getTableHeader().setResizingAllowed(false);
+			scroll=new JScrollPane(users);
+			scroll.setBounds(40, 90, 580, 440);
+			getContentPane().add(scroll);
 		}
 	}
 }

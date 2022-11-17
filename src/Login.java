@@ -56,6 +56,7 @@ public class Login extends JFrame implements ActionListener {
 		
 		setSize(596, 405);	// 화면 사이즈
 		setVisible(visible);	// 
+		setLocationRelativeTo(null);
 		
 	}
 	@Override
@@ -63,28 +64,28 @@ public class Login extends JFrame implements ActionListener {
 		User user=new User();
 		JButton b=(JButton)e.getSource();
 		if(textField_1.getText().equals("")||textField.getText().equals("")) {
-			JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","로그인 실패",JOptionPane.WARNING_MESSAGE);
 		}
 		else {
 			user=dba.login(textField_1.getText(),textField.getText());
 			if(user.getName()==null||Integer.toString(user.getId())==null) {
-				JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","로그인 실패",JOptionPane.WARNING_MESSAGE);
 			}
 			else if(user.getId()==0&&user.getName().equals("admin")) {
 				//user=dba.login(textField_1.getText(),textField.getText());
 				ArrayList<User> list=new ArrayList<>();
 				dba.selectAllData(list);
-				new adminGui(list);
 				this.dispose();
+				new adminGui(list);
 
 			}
 			else if (Integer.toString(user.getId())!=null) {
 				//user=dba.login(textField_1.getText(),textField.getText());
-				new MyUser(user);
 				this.dispose();
+				new MyUser(user);
 			}
 			else {
-				JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "아이디 또는 비밀번호가 다릅니다.","로그인 실패",JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -92,6 +93,6 @@ public class Login extends JFrame implements ActionListener {
 	public static void main(String args[]) {
 		
 		// 로그인 화면
-		Login login = new Login("로그인창", 500, 500, true);
+		new Login("로그인창", 500, 500, true);
 	}
 }
